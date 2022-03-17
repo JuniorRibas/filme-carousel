@@ -18,6 +18,7 @@ import {
 import { getMovies } from "./../api";
 import { Genres } from "./../components/Genres";
 import { Rating } from "../components/Rating";
+import { Backdrop } from "../components/Backdrop";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   BACKDROP_HEIGHT,
@@ -35,62 +36,6 @@ const Loading = () => (
 );
 
 // import { Container } from './styles';
-
-interface BackdropProps {
-  movies: Array<any>;
-  scrollX: Animated.Value;
-}
-
-const Backdrop = ({ movies, scrollX }: BackdropProps) => {
-  return (
-    <View style={{ height: BACKDROP_HEIGHT, width, position: "absolute" }}>
-      <FlatList
-        data={movies.reverse()}
-        keyExtractor={(item) => item.key + "-backdrop"}
-        removeClippedSubviews={false}
-        contentContainerStyle={{ width, height: BACKDROP_HEIGHT }}
-        renderItem={({ item, index }) => {
-          if (!item.backdrop) {
-            return null;
-          }
-          const translateX = scrollX.interpolate({
-            inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
-            outputRange: [0, width],
-          });
-          return (
-            <Animated.View
-              removeClippedSubviews={false}
-              style={{
-                position: "absolute",
-                width: translateX,
-                height,
-                overflow: "hidden",
-              }}
-            >
-              <Image
-                source={{ uri: item.backdrop }}
-                style={{
-                  width,
-                  height: BACKDROP_HEIGHT,
-                  position: "absolute",
-                }}
-              />
-            </Animated.View>
-          );
-        }}
-      />
-      <LinearGradient
-        colors={["rgba(0, 0, 0, 0)", "white"]}
-        style={{
-          height: BACKDROP_HEIGHT,
-          width,
-          position: "absolute",
-          bottom: 0,
-        }}
-      />
-    </View>
-  );
-};
 
 export default function App() {
   const [movies, setMovies] = React.useState([] as any);
@@ -181,6 +126,7 @@ export default function App() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
